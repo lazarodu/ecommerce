@@ -8,7 +8,7 @@ import { SiInstacart } from "react-icons/si";
 import { GrMoney } from "react-icons/gr";
 
 import { Link } from "../../styles";
-import { Container } from "./style";
+import { Container } from "./styles";
 import { Loading } from "../";
 
 const Header = () => {
@@ -24,7 +24,7 @@ const Header = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 500);
   }, []);
 
   return (
@@ -39,7 +39,7 @@ const Header = () => {
               Produtos <SiInstacart />
             </Link>
             <Link onClick={() => history.push(`${route}/home/vendas`)}>
-              Produtos <GrMoney />
+              Vendas <GrMoney />
             </Link>
             <div>
               <BiUserCircle onClick={() => history.push(`${route}/users`)} />
