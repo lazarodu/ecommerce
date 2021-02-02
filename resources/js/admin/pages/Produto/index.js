@@ -4,7 +4,7 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { FaPencilAlt, FaTrashAlt, FaPlusCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { apiCategoria } from "../../../services/data";
-import { Loading, Table } from "../../components";
+import { Loading, Table, Categoria, Produto } from "../../components";
 import { Button } from "../../styles";
 import { Container } from "./styles";
 const route = process.env.MIX_APP_ROUTE;
@@ -29,11 +29,11 @@ const Produtos = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [idcat]);
 
   const handleRemoveCategoria = useCallback(async ({ id }) => {
     try {
-      apiCategoria.delete(id);
+      await apiCategoria.destroy(id);
       fetchData();
       toast.success("Removido com sucesso!");
     } catch (error) {
@@ -43,7 +43,7 @@ const Produtos = () => {
 
   const handleRemoveProduto = useCallback(async ({ id }) => {
     try {
-      apiProduto.delete(id);
+      await apiProduto.destroy(id);
       fetchData();
       toast.success("Removido com sucesso!");
     } catch (error) {

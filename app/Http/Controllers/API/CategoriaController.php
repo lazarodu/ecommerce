@@ -30,10 +30,14 @@ class CategoriaController extends Controller
   public function store(Request $request)
   {
     $categoria = new Categoria();
-    $categoria->nome = $request->get('nome');
-    $categoria->slug = Str::slug($request->get('nome'));
-    $categoria->save();
-    return new DataResource($categoria);
+    if ($categoria->validate($request->all())) {
+      $categoria->nome = $request->get('nome');
+      $categoria->slug = Str::slug($request->get('nome'));
+      $categoria->save();
+      return new DataResource($categoria);
+    } else {
+      return response($categoria->getErrors(), 400);
+    }
   }
 
   /**

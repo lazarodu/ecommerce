@@ -28,6 +28,12 @@ export default createGlobalStyle`
 
     --secondary: #6c757d;
     --secondary-hover: #5a6268;
+
+    --background-input: #f5c6cb;
+  }
+
+  .Toastify__toast-body {
+    white-space: pre-line;
   }
 
   .container {

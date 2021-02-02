@@ -52,7 +52,9 @@ const Categoria = () => {
         }
         history.push(`${route}/home/produtos`);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(
+          error.response.data ? error.response.data.join("\n") : error.message
+        );
       }
     },
     [history]

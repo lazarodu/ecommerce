@@ -11,6 +11,6 @@ class Categoria extends Model
   use HasFactory, ModelValidation;
 
   protected static $rules = [
-    'nome' => 'required|min:3|unique'
+    'nome' => 'required|min:3|unique:categorias',
   ];
 }
