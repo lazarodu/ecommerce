@@ -85,7 +85,7 @@ const Produto = () => {
                 id="categoria"
                 ref={register({ required: true })}
                 required
-                value={produto.nome || ""}
+                value={produto.categoria_id || ""}
                 onChange={handleChange}
               >
                 <option></option>
@@ -118,6 +118,16 @@ const Produto = () => {
                 required
                 value={produto.quantidade || ""}
                 onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="imagens">Imagens:</label>
+              <Input
+                type="file"
+                name="files[]"
+                id="imagens"
+                multiple
+                ref={register}
               />
             </div>
 

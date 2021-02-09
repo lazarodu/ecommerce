@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DataResource;
 use App\Models\Produto;
+use App\Services\ImagesService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProdutoController extends Controller
 {
@@ -15,7 +18,8 @@ class ProdutoController extends Controller
    */
   public function index()
   {
-    //
+    $produtos = Produto::with(['categoria', 'imagens'])->get();
+    return new DataResource($produtos);
   }
 
   /**
@@ -26,7 +30,21 @@ class ProdutoController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    $produto = new Produto();
+    if ($produto->validate($request->all())) {
+      $produto->categoria_id = $request->get('categoria_id');
+      $produto->nome = $request->get('nome');
+      $produto->slug = Str::slug($request->get('nome'));
+      $produto->quantidade = $request->get('quantidade');
+      $produto->save();
+      if ($request->hasfile('files')) {
+        $imagem = new ImagesService($request->file('files'));
+        $imagem->upload($produto->id);
+      }
+      return new DataResource($produto);
+    } else {
+      return response($produto->getErrors(), 400);
+    }
   }
 
   /**

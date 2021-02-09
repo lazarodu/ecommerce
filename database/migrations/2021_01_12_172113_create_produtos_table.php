@@ -21,6 +21,7 @@ class CreateProdutosTable extends Migration
       $table->string('slug')->unique();
       $table->integer('quantidade');
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 

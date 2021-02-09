@@ -54,12 +54,6 @@ const Button = styled.button`
   padding: 6px;
   font-weight: 700;
 
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  margin: 0 10px;
-  color: var(--black);
-
   border: 0;
   border-radius: 5px;
   cursor: pointer;

@@ -3,7 +3,11 @@ import { useParams, useHistory } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { FaPencilAlt, FaTrashAlt, FaPlusCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { apiCategoria } from "../../../services/data";
+import {
+  apiCategoria,
+  apiProduto,
+  apiCategoriaDeleted,
+} from "../../../services/data";
 import { Loading, Table, Categoria, Produto } from "../../components";
 import { Button } from "../../styles";
 import { Container } from "./styles";
@@ -18,8 +22,17 @@ const Produtos = () => {
 
   const fetchData = async () => {
     try {
-      const categories = await apiCategoria.index();
+      let categories;
+      const categoriaDeleted = document.querySelector("#categoriaDeleted")
+        ?.checked;
+      if (categoriaDeleted) {
+        categories = await apiCategoriaDeleted.index();
+      } else {
+        categories = await apiCategoria.index();
+      }
       setCategorias(categories.data.data);
+      const products = await apiProduto.index();
+      setProdutos(products.data.data);
     } catch (error) {
       toast.error(error);
     } finally {
@@ -29,11 +42,17 @@ const Produtos = () => {
 
   useEffect(() => {
     fetchData();
-  }, [idcat]);
+  }, [idcat, idprod]);
 
   const handleRemoveCategoria = useCallback(async ({ id }) => {
     try {
-      await apiCategoria.destroy(id);
+      const categoriaDeleted = document.querySelector("#categoriaDeleted")
+        ?.checked;
+      if (categoriaDeleted) {
+        await apiCategoriaDeleted.destroy(id);
+      } else {
+        await apiCategoria.destroy(id);
+      }
       fetchData();
       toast.success("Removido com sucesso!");
     } catch (error) {
@@ -176,6 +195,12 @@ const Produtos = () => {
                   >
                     <FaPlusCircle /> Adicionar
                   </Button>
+                  <input
+                    type="checkbox"
+                    name="categoriaDeleted"
+                    id="categoriaDeleted"
+                    onClick={() => fetchData()}
+                  />
                   <Table columns={columnCategorias} data={categorias} />
                 </>
               )}

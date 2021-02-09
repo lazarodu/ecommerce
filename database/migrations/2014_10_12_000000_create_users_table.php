@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
       $table->enum('perfil', ['cliente', 'admin'])->default('cliente')->notNullable();
       $table->rememberToken();
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 

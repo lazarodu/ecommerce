@@ -20,5 +20,5 @@ Route::get('/', [MainController::class, 'index']);
 Auth::routes();
 
 Route::group(["middleware" => "auth"], function () {
-  Route::get('/home/{path?}', [HomeController::class, 'index']);
+  Route::get('/home/{path?}', [HomeController::class, 'index'])->where('path', '.*');
 });
