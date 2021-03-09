@@ -11,7 +11,7 @@ class ProdutoData {
     return api.get(`produtos/${id}`);
   }
   update(id, data) {
-    return api.put(`produtos/${id}`, data);
+    return api.post(`produtos/${id}`, data);
   }
   destroy(id) {
     return api.delete(`produtos/${id}`);

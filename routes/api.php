@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\CarrinhoController;
 use App\Http\Controllers\API\CategoriaController;
-use App\Http\Controllers\API\CategoriaDeletedController;
+use App\Http\Controllers\API\ImagemController;
 use App\Http\Controllers\API\ProdutoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,10 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::group(['middleware' => 'auth:api'], function () {
-  Route::apiResource('categorias/deleted', CategoriaDeletedController::class);
+  Route::get('categorias/deleted', [CategoriaController::class, 'indexDeleted']);
   Route::apiResource('categorias', CategoriaController::class);
+  Route::get('produtos/deleted', [ProdutoController::class, 'indexDeleted']);
   Route::apiResource('produtos', ProdutoController::class);
+  Route::apiResource('imagens', ImagemController::class);
+  Route::apiResource('carrinho', CarrinhoController::class);
 });

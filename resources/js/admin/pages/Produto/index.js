@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import {
   apiCategoria,
   apiProduto,
+  apiProdutoDeleted,
   apiCategoriaDeleted,
 } from "../../../services/data";
 import { Loading, Table, Categoria, Produto } from "../../components";
@@ -31,7 +32,13 @@ const Produtos = () => {
         categories = await apiCategoria.index();
       }
       setCategorias(categories.data.data);
-      const products = await apiProduto.index();
+      let products;
+      const produtoDeleted = document.querySelector("#produtoDeleted")?.checked;
+      if (produtoDeleted) {
+        products = await apiProdutoDeleted.index();
+      } else {
+        products = await apiProduto.index();
+      }
       setProdutos(products.data.data);
     } catch (error) {
       toast.error(error);
@@ -46,13 +53,7 @@ const Produtos = () => {
 
   const handleRemoveCategoria = useCallback(async ({ id }) => {
     try {
-      const categoriaDeleted = document.querySelector("#categoriaDeleted")
-        ?.checked;
-      if (categoriaDeleted) {
-        await apiCategoriaDeleted.destroy(id);
-      } else {
-        await apiCategoria.destroy(id);
-      }
+      await apiCategoria.destroy(id);
       fetchData();
       toast.success("Removido com sucesso!");
     } catch (error) {
@@ -122,8 +123,32 @@ const Produtos = () => {
         Header: "Produtos",
         columns: [
           {
+            Header: "Categoria",
+            accessor: "categoria.nome",
+          },
+          {
             Header: "Nome",
             accessor: "nome",
+          },
+          {
+            Header: "Quantidade",
+            accessor: "quantidade",
+          },
+          {
+            Header: "Preço",
+            accessor: "preco",
+          },
+          {
+            Header: "Imagens",
+            accessor: ({ imagens }) =>
+              imagens.map((item) => (
+                <div key={item.id}>
+                  <img
+                    src={`/storage/${item.url.replace("public/", "")}`}
+                    width="100px"
+                  />
+                </div>
+              )),
           },
         ],
       },
@@ -181,6 +206,12 @@ const Produtos = () => {
                   >
                     <FaPlusCircle /> Adicionar
                   </Button>
+                  <input
+                    type="checkbox"
+                    name="produtoDeleted"
+                    id="produtoDeleted"
+                    onClick={() => fetchData()}
+                  />
                   <Table columns={columnProdutos} data={produtos} />
                 </>
               )}

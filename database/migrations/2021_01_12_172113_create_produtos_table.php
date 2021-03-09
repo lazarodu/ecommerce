@@ -20,6 +20,7 @@ class CreateProdutosTable extends Migration
       $table->string('nome')->unique();
       $table->string('slug')->unique();
       $table->integer('quantidade');
+      $table->decimal('preco', 10, 2);
       $table->timestamps();
       $table->softDeletes();
     });

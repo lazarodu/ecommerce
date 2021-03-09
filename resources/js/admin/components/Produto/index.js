@@ -2,13 +2,13 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { FaHandPointLeft, FaSave } from "react-icons/fa";
+import { FaHandPointLeft, FaSave, FaTrashAlt } from "react-icons/fa";
 import { Input, Select, Button, Link, Form } from "../../styles";
-import { apiProduto, apiCategoria } from "../../../services/data";
+import { apiProduto, apiCategoria, apiImagem } from "../../../services/data";
 import { Loading } from "../";
 
 const Produto = () => {
-  const { idcat } = useParams();
+  const { idprod } = useParams();
   const history = useHistory();
   const { register, handleSubmit } = useForm();
   const [produto, setProduto] = useState([]);
@@ -16,28 +16,29 @@ const Produto = () => {
   const [isLoading, setIsLoading] = useState(true);
   const route = process.env.MIX_APP_ROUTE;
 
+  const fetchData = async (idprod) => {
+    try {
+      const products = await apiProduto.show(idprod);
+      setProduto(products.data.data);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const loadCategorias = async () => {
       const categories = await apiCategoria.index();
       setCategoria(categories.data.data);
     };
-    if (idcat > 0) {
-      const fetchData = async (idcat) => {
-        try {
-          const products = await apiProduto.show(idcat);
-          setProduto(products.data.data);
-        } catch (error) {
-          toast.error(error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchData(id);
+    if (idprod > 0) {
+      fetchData(idprod);
     } else {
       setIsLoading(false);
     }
     loadCategorias();
-  }, [idcat]);
+  }, [idprod]);
 
   const handleChange = useCallback(
     async (e) => {
@@ -46,19 +47,41 @@ const Produto = () => {
     [produto]
   );
 
+  const handleRemoveImage = useCallback(async ({ id }) => {
+    try {
+      await apiImagem.delete(id);
+      fetchData(idprod);
+      toast.success("Removido com sucesso!");
+    } catch (error) {
+      toast.error(error);
+    }
+  }, []);
+
   const onSubmit = useCallback(
     async (data) => {
       try {
+        const { files } = data;
+        const fileData = new FormData();
+        fileData.set("categoria_id", data.categoria_id);
+        fileData.set("nome", data.nome);
+        fileData.set("quantidade", data.quantidade);
+        fileData.set("preco", data.preco);
+        for (let i = 0; i < files.length; i++) {
+          fileData.append("files[]", files[i]);
+        }
         if (data.id > 0) {
-          await apiProduto.update(data.id, data);
+          fileData.append("_method", "PUT");
+          await apiProduto.update(data.id, fileData);
           toast.success("Produto alterado");
         } else {
-          await apiProduto.store(data);
+          await apiProduto.store(fileData);
           toast.success("Produto cadastrado");
         }
         history.push(`${route}/home/produtos`);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(
+          error.response.data ? error.response.data.join("\n") : error.message
+        );
       }
     },
     [history]
@@ -77,7 +100,12 @@ const Produto = () => {
             <FaHandPointLeft /> Voltar
           </Link>
           <Form method="POST" onSubmit={handleSubmit(onSubmit)}>
-            <input type="hidden" name="id" value={idcat || ""} ref={register} />
+            <input
+              type="hidden"
+              name="id"
+              value={idprod || ""}
+              ref={register}
+            />
             <div>
               <label htmlFor="categoria">Categorias:</label>
               <Select
@@ -121,6 +149,19 @@ const Produto = () => {
               />
             </div>
             <div>
+              <label htmlFor="preco">Preço:</label>
+              <Input
+                type="number"
+                step="0.01"
+                name="preco"
+                id="preco"
+                ref={register({ required: true })}
+                required
+                value={produto.preco || ""}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
               <label htmlFor="imagens">Imagens:</label>
               <Input
                 type="file"
@@ -130,6 +171,24 @@ const Produto = () => {
                 ref={register}
               />
             </div>
+            {produto.imagens &&
+              produto.imagens.map((item) => (
+                <div key={item.id}>
+                  <label>
+                    <Button
+                      type="button"
+                      bgColor="danger"
+                      onClick={() => handleRemoveImage({ id: item.id })}
+                    >
+                      <FaTrashAlt />
+                    </Button>
+                  </label>
+                  <img
+                    src={`/storage/${item.url.replace("public/", "")}`}
+                    width="100px"
+                  />
+                </div>
+              ))}
 
             <Button bgColor="success" type="submit">
               <FaSave /> Salvar

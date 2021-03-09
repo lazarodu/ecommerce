@@ -22,6 +22,17 @@ class CategoriaController extends Controller
   }
 
   /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function indexDeleted()
+  {
+    $categorias = Categoria::withTrashed()->get();
+    return new DataResource($categorias);
+  }
+
+  /**
    * Store a newly created resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
@@ -46,8 +57,9 @@ class CategoriaController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function show(Categoria $categoria)
+  public function show($id)
   {
+    $categoria = Categoria::withTrashed()->find($id);
     return new DataResource($categoria);
   }
 
@@ -58,12 +70,20 @@ class CategoriaController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, Categoria $categoria)
+  public function update(Request $request, $id)
   {
-    $categoria->nome = $request->get('nome');
-    $categoria->slug = Str::slug($request->get('nome'));
-    $categoria->save();
-    return new DataResource($categoria);
+    $categoria = Categoria::withTrashed()->find($id);
+    if ($categoria->validate($request->all())) {
+      $categoria->nome = $request->get('nome');
+      $categoria->slug = Str::slug($request->get('nome'));
+      $categoria->save();
+      if ($categoria->trashed()) {
+        $categoria->restore();
+      }
+      return new DataResource($categoria);
+    } else {
+      return response($categoria->getErrors(), 400);
+    }
   }
 
   /**
@@ -72,9 +92,14 @@ class CategoriaController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Categoria $categoria)
+  public function destroy($id)
   {
-    $categoria->delete();
+    $categoria = Categoria::withTrashed()->find($id);
+    if ($categoria->trashed()) {
+      $categoria->forceDelete();
+    } else {
+      $categoria->delete();
+    }
     return new DataResource($categoria);
   }
 }

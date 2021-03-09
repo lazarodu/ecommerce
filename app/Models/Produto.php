@@ -30,5 +30,6 @@ class Produto extends Model
     'categoria_id' => 'required|numeric',
     'nome' => 'required',
     'quantidade' => 'required|numeric',
+    'preco' => 'required|numeric',
   ];
 }

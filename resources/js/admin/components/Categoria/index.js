@@ -19,7 +19,14 @@ const Categoria = () => {
     if (idcat > 0) {
       const fetchData = async (idcat) => {
         try {
-          const categories = await apiCategoria.show(idcat);
+          let categories;
+          const categoriaDeleted = document.querySelector("#categoriaDeleted")
+            ?.checked;
+          if (categoriaDeleted) {
+            categories = await apiCategoriaDeleted.show(idcat);
+          } else {
+            categories = await apiCategoria.show(idcat);
+          }
           setCategoria(categories.data.data);
         } catch (error) {
           toast.error(error);

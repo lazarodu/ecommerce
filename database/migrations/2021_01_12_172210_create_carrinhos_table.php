@@ -21,7 +21,7 @@ class CreateCarrinhosTable extends Migration
         ->onDelete('cascade')->onUpdate('cascade');
       $table->integer('quantidade');
       $table->foreignId('compra_id')->constrained()
-        ->onDelete('cascade')->onUpdate('cascade')->nullable();
+        ->onDelete('cascade')->onUpdate('cascade')->nullable()->default(null);
       $table->timestamps();
     });
   }
