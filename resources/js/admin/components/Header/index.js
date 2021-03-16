@@ -9,7 +9,7 @@ import { GrMoney } from "react-icons/gr";
 
 import { Link } from "../../styles";
 import { Container } from "./styles";
-import { Loading } from "../";
+import { Loading } from "../../../components";
 
 const Header = () => {
   const history = useHistory();

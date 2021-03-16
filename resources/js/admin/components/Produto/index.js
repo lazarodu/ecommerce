@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { FaHandPointLeft, FaSave, FaTrashAlt } from "react-icons/fa";
 import { Input, Select, Button, Link, Form } from "../../styles";
 import { apiProduto, apiCategoria, apiImagem } from "../../../services/data";
-import { Loading } from "../";
+import { Loading } from "../../../components";
 
 const Produto = () => {
   const { idprod } = useParams();

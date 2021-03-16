@@ -12,8 +12,9 @@ class CategoriaController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index($slug)
   {
-    //
+    $categoria = Categoria::where("slug", $slug)->get();
+    return view('categoria', compact('categoria'));
   }
 }

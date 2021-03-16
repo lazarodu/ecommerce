@@ -20,12 +20,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MainController::class, 'index']);
 Route::get('/produto/{slug}', [ProdutoController::class, 'index']);
-Route::get('/categoria/{slig}', [CategoriaController::class, 'index']);
+Route::get('/categoria/{slug}', [CategoriaController::class, 'index']);
 
 Auth::routes();
 
 Route::group(["middleware" => "auth"], function () {
-  Route::get('/home/{path?}', [HomeController::class, 'index'])->where('path', '.*');
+  Route::get('/home/{path?}', [HomeController::class, 'index'])->where('path', '.*')->middleware('admin');
   Route::get('/carrinho/{path?}', [CarrinhoController::class, 'index'])->where('path', '.*');
   Route::post('/carrinho', [CarrinhoController::class, 'store']);
 });

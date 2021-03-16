@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\CarrinhoController;
 use App\Http\Controllers\API\CategoriaController;
+use App\Http\Controllers\API\CompraController;
 use App\Http\Controllers\API\ImagemController;
 use App\Http\Controllers\API\ProdutoController;
 use Illuminate\Http\Request;
@@ -29,4 +30,5 @@ Route::group(['middleware' => 'auth:api'], function () {
   Route::apiResource('produtos', ProdutoController::class);
   Route::apiResource('imagens', ImagemController::class);
   Route::apiResource('carrinho', CarrinhoController::class);
+  Route::apiResource('compra', CompraController::class);
 });

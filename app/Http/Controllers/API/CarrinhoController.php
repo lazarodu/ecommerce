@@ -17,7 +17,10 @@ class CarrinhoController extends Controller
    */
   public function index()
   {
-    $carrinho = Carrinho::with(["produto.imagens"])->where('user_id', Auth::user()->id)->get();
+    $carrinho = Carrinho::with(["produto.imagens"])
+      ->where('user_id', Auth::user()->id)
+      ->where('compra_id', NULL)
+      ->get();
     return new DataResource($carrinho);
   }
 
@@ -52,7 +55,14 @@ class CarrinhoController extends Controller
    */
   public function update(Request $request, Carrinho $carrinho)
   {
-    //
+    if ($carrinho->validate($request->all())) {
+      $carrinho->produto_id = $request->get('produto_id');
+      $carrinho->quantidade = $request->get('quantidade');
+      $carrinho->save();
+      return new DataResource($carrinho);
+    } else {
+      return response($carrinho->getErrors(), 400);
+    }
   }
 
   /**
@@ -63,6 +73,7 @@ class CarrinhoController extends Controller
    */
   public function destroy(Carrinho $carrinho)
   {
-    //
+    $carrinho->delete();
+    return new DataResource($carrinho);
   }
 }

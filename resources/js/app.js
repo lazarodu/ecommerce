@@ -13,3 +13,4 @@ require("./bootstrap");
  */
 
 require("./admin");
+require("./carrinho");

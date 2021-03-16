@@ -9,7 +9,8 @@ import {
   apiProdutoDeleted,
   apiCategoriaDeleted,
 } from "../../../services/data";
-import { Loading, Table, Categoria, Produto } from "../../components";
+import { Table, Categoria, Produto } from "../../components";
+import { Loading } from "../../../components";
 import { Button } from "../../styles";
 import { Container } from "./styles";
 const route = process.env.MIX_APP_ROUTE;

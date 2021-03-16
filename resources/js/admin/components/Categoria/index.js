@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { FaHandPointLeft, FaSave } from "react-icons/fa";
 import { Input, Button, Link, Form } from "../../styles";
 import { apiCategoria } from "../../../services/data";
-import { Loading } from "../";
+import { Loading } from "../../../components";
 
 const Categoria = () => {
   const { idcat } = useParams();

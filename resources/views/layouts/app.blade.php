@@ -38,7 +38,7 @@
           <ul class="navbar-nav mr-auto">
             @foreach($resources->categorias() as $categoria)
             <li class="nav-item">
-              <a class="nav-link" href="{{ $categoria->slug }}">{{ $categoria->nome }}</a>
+              <a class="nav-link" href="{{ url('/categoria/'.$categoria->slug) }}">{{ $categoria->nome }}</a>
             </li>
             @endforeach
           </ul>
