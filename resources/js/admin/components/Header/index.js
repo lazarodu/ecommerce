@@ -42,7 +42,9 @@ const Header = () => {
               Vendas <GrMoney />
             </Link>
             <div>
-              <BiUserCircle onClick={() => history.push(`${route}/users`)} />
+              <BiUserCircle
+                onClick={() => history.push(`${route}/home/users`)}
+              />
               <IoIosLogOut onClick={handleSignout} />
             </div>
           </div>

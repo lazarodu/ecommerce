@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\CompraController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProdutoController;
@@ -28,4 +29,5 @@ Route::group(["middleware" => "auth"], function () {
   Route::get('/home/{path?}', [HomeController::class, 'index'])->where('path', '.*')->middleware('admin');
   Route::get('/carrinho/{path?}', [CarrinhoController::class, 'index'])->where('path', '.*');
   Route::post('/carrinho', [CarrinhoController::class, 'store']);
+  Route::get('/compra', [CompraController::class, 'index']);
 });

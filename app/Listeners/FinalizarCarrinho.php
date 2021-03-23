@@ -29,6 +29,7 @@ class FinalizarCarrinho
   public function handle(ProdutoVendido $event)
   {
     Carrinho::where('user_id', Auth::user()->id)
+      ->where('compra_id', null)
       ->update(['compra_id' => $event->getCompra()->id]);
   }
 }

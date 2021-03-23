@@ -5,3 +5,4 @@ export { default as apiCompra } from "./compra";
 export { default as apiImagem } from "./imagem";
 export { default as apiProduto } from "./produto";
 export { default as apiProdutoDeleted } from "./produtoDeleted";
+export { default as apiUser } from "./user";

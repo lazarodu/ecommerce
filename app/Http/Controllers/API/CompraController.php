@@ -17,7 +17,8 @@ class CompraController extends Controller
    */
   public function index()
   {
-    //
+    $compras = Compra::with(["carrinhos.produto"])->get();
+    return new DataResource($compras);
   }
 
   /**
@@ -59,7 +60,9 @@ class CompraController extends Controller
    */
   public function update(Request $request, Compra $compra)
   {
-    //
+    $compra->status = $request->get('status');
+    $compra->save();
+    return new DataResource($compra);
   }
 
   /**

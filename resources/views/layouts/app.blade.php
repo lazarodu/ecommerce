@@ -65,6 +65,10 @@
               </a>
 
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                @admin()
+                <a class="dropdown-item" href="{{url('/home')}}">Admin</a>
+                @endadmin
+                <a class="dropdown-item" href="{{url('/compra')}}">Minhas Compras</a>
                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                   {{ __('Logout') }}
