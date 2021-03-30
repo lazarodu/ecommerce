@@ -45,6 +45,14 @@
 
           <!-- Right Side Of Navbar -->
           <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="btn btn-success" href="{{ url('/carrinho') }}">
+                <i class="fa fa-shopping-cart"></i>
+                @if($resources->carrinho() > 0)
+                <span class="badge badge-light">{{$resources->carrinho()}}</span>
+                @endif
+              </a>
+            </li>
             <!-- Authentication Links -->
             @guest
             @if (Route::has('login'))
